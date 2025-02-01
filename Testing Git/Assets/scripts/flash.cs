@@ -8,6 +8,7 @@ public class flash : MonoBehaviour
     public float fadeDuration;
     public float maxIntensity;
     public bool LightFlashing;
+    public bool flashbang;
 
     void Update()
     {
@@ -15,6 +16,7 @@ public class flash : MonoBehaviour
         {
             if (!LightFlashing)
             {
+
                 StartCoroutine(FadeOutLight());
                 LightFlashing = true;
             }
@@ -26,9 +28,14 @@ public class flash : MonoBehaviour
     {
         lightSource.intensity = maxIntensity;
         float elapsedTime = 0f;
-        if (Random.Range(0, 10) == 0)
+        if (Random.Range(0, 10) == 0 && !flashbang)
         {
             lightSource.color = Color.red;
+        }
+        if (flashbang)
+        {
+            maxIntensity = 1000;
+            
         }
         
         while (elapsedTime < fadeDuration)
@@ -39,8 +46,10 @@ public class flash : MonoBehaviour
         }
 
         lightSource.intensity = 0;
+        flashbang = false;
         lightSource.color = Color.white;
         yield return new WaitForSeconds(1);
         LightFlashing = false;
+        maxIntensity = 500;
     }
 }
